@@ -1,0 +1,61 @@
+/*
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Alenok — Portfolio excerpt · Scoped design tokens
+ * Simplified from the production implementation for demonstration purposes.
+ * © 2026 Fredy Espinoza — All rights reserved. See LICENSE.
+ * ─────────────────────────────────────────────────────────────────────────────
+ *
+ * The custom sections are injected into an EXISTING theme. To avoid style
+ * collisions in both directions:
+ *   • every rule is namespaced under .aln-scope
+ *   • tokens are CSS custom properties defined on the scope, not on :root
+ *   • `isolation: isolate` creates a new stacking context, so z-index inside
+ *     the sections can never fight with the theme header, drawers or modals
+ */
+.aln-scope {
+  /* Brand palette */
+  --navy:        #14213D;
+  --navy-2:      #1F2937;
+  --copper:      #B45309;   /* primary CTA — AA contrast on white */
+  --copper-tint: #F1E4D8;
+  --gray:        #6B7280;
+  --gray-light:  #9CA3AF;
+  --bg:          #FAF9F7;
+  --line:        #E9E7E2;
+
+  /* Type */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'Inter', system-ui, -apple-system, sans-serif;
+
+  /* Shape & motion */
+  --radius-sm: 7px;
+  --radius-lg: 16px;
+  --ease: cubic-bezier(.2, .8, .2, 1);
+
+  position: relative;
+  isolation: isolate;
+  font-family: var(--font-body);
+  color: var(--navy-2);
+}
+
+/* Local reset — only inside the scope, never global */
+.aln-scope,
+.aln-scope * { box-sizing: border-box; margin: 0; padding: 0; }
+
+.aln-scope h1,
+.aln-scope h2 { font-family: var(--font-display); color: var(--navy); }
+
+.aln-container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+
+/* Visible keyboard focus (theme resets often remove it) */
+.aln-scope :is(a, button, input, textarea):focus-visible {
+  outline: 2px solid var(--copper);
+  outline-offset: 2px;
+}
+
+/* Reveal animation used by src/ui/reveal-and-stepper.js */
+.aln-scope .reveal      { opacity: 0; transform: translateY(16px); transition: opacity .6s var(--ease), transform .6s var(--ease); }
+.aln-scope .reveal.show { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .aln-scope .reveal { opacity: 1; transform: none; transition: none; }
+}
