@@ -33,9 +33,9 @@ conversion-focused product page designed mobile-first for a cash-on-delivery mar
 |---|---|
 | ![Home page on desktop](docs/images/01-home-desktop.jpg) | ![Product page on desktop](docs/images/02-pdp-desktop.jpg) |
 
-| Product page — mobile | Before / After section |
-|---|---|
-| <img src="docs/images/03-pdp-mobile.jpg" alt="Product page on mobile" width="300"> | ![Before and after section](docs/images/04-before-after-desktop.jpg) |
+**Before / After section — desktop**
+
+![Before and after section](docs/images/04-before-after-desktop.jpg)
 
 
 ---
