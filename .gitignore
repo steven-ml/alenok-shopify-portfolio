@@ -1,0 +1,67 @@
+# ─────────────────────────────────────────────
+#  Secrets & credentials — NEVER commit these
+# ─────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+id_rsa*
+id_ed25519*
+secrets.*
+*.secret
+*credentials*
+*.token
+# Shopify CLI / Theme Kit store credentials & local session
+config.yml
+.shopify/
+.theme-kit/
+shopify.theme.toml
+
+# ─────────────────────────────────────────────
+#  Customer & business data — NEVER commit
+# ─────────────────────────────────────────────
+*.csv
+*.xlsx
+*.xls
+orders*/
+customers*/
+exports/
+backups/
+
+# ─────────────────────────────────────────────
+#  Heavy media (store in Shopify Files / Drive)
+# ─────────────────────────────────────────────
+*.mp4
+*.mov
+*.zip
+*.rar
+*.7z
+
+# ─────────────────────────────────────────────
+#  Dependencies & build output
+# ─────────────────────────────────────────────
+node_modules/
+dist/
+build/
+.cache/
+__pycache__/
+*.pyc
+
+# ─────────────────────────────────────────────
+#  OS, editor & temporary files
+# ─────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*.tmp
+*.bak
+*.log
+.~lock.*
+~$*
