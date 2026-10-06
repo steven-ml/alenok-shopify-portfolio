@@ -1,0 +1,45 @@
+{%- comment -%}
+  ─────────────────────────────────────────────────────────────────────────────
+  Alenok — Portfolio excerpt · Variant option chips (Liquid)
+  Simplified from the production implementation for demonstration purposes.
+  © 2026 Fredy Espinoza — All rights reserved. See LICENSE.
+  ─────────────────────────────────────────────────────────────────────────────
+  What this shows
+  • Renders ANY product option (size, color…) from `options_with_values`
+  • Zero-config for the merchant: the selector appears automatically the moment
+    a variant option is created in the admin, and disappears when there is none
+  • The native <select name="id"> stays in the form, so the "add to cart" POST
+    keeps working even if JavaScript fails (progressive enhancement)
+{%- endcomment -%}
+
+<select name="id" id="aln-variant-select" hidden>
+  {%- for v in product.variants -%}
+    <option value="{{ v.id }}" {% if v == product.selected_or_first_available_variant %}selected{% endif %}
+            {% unless v.available %}disabled{% endunless %}>{{ v.title }}</option>
+  {%- endfor -%}
+</select>
+
+{%- unless product.has_only_default_variant -%}
+  {%- for option in product.options_with_values -%}
+    <fieldset class="option-select">
+      <legend class="os-head">
+        <span class="os-label">{{ option.name }}</span>
+        <span class="os-current" data-option-current="{{ forloop.index0 }}">{{ option.selected_value }}</span>
+      </legend>
+
+      <div class="option-chips" role="radiogroup" aria-label="{{ option.name | escape }}">
+        {%- for value in option.values -%}
+          <button type="button" role="radio"
+                  class="option-chip{% if value == option.selected_value %} is-active{% endif %}"
+                  aria-checked="{% if value == option.selected_value %}true{% else %}false{% endif %}"
+                  data-option-index="{{ option.position | minus: 1 }}"
+                  data-option-value="{{ value | escape }}">
+            {{ value }}
+          </button>
+        {%- endfor -%}
+      </div>
+    </fieldset>
+  {%- endfor -%}
+{%- endunless -%}
+
+<script type="application/json" id="aln-variants-json">{{ product.variants | json }}</script>
