@@ -1,0 +1,76 @@
+{%- comment -%}
+  ─────────────────────────────────────────────────────────────────────────────
+  Alenok — Portfolio excerpt · Cart line item (Liquid)
+  Simplified from the production implementation for demonstration purposes.
+  Not a drop-in file: styles, copy, business rules and integrations are omitted.
+  © 2026 Fredy Espinoza — All rights reserved. See LICENSE.
+  ─────────────────────────────────────────────────────────────────────────────
+  What this shows
+  • Money math on integer cents (Shopify `money` filter)
+  • Workaround for a platform limitation: order-level automatic discounts are
+    NOT allocated to `item.final_line_price` — only `cart.total_price` has them
+  • JSON-safe item keys passed to JS through data attributes
+  • Accessible, server-rendered markup that JS progressively enhances
+{%- endcomment -%}
+
+{%- assign reference_unit_cents = section.settings.reference_unit_cents | default: 0 -%}
+
+{%- for item in cart.items -%}
+  {%- comment -%} Compare-at reference price scales with quantity {%- endcomment -%}
+  {%- assign ref_cents = item.quantity | times: reference_unit_cents -%}
+
+  {%- comment -%}
+    With a single line item, cart.total_price IS the real line price
+    (it already includes order-level discounts). With several lines we fall
+    back to final_line_price. Trade-off documented in docs/ENGINEERING-NOTES.md.
+  {%- endcomment -%}
+  {%- if cart.items.size == 1 -%}
+    {%- assign line_cents = cart.total_price -%}
+  {%- else -%}
+    {%- assign line_cents = item.final_line_price -%}
+  {%- endif -%}
+  {%- assign save_cents = ref_cents | minus: line_cents -%}
+
+  <div class="cart-item" id="aln-row-{{ item.key }}">
+    <div class="ci-img">
+      {%- if item.image -%}
+        <img src="{{ item.image | image_url: width: 200 }}"
+             alt="{{ item.title | escape }}" loading="lazy" width="88" height="88">
+      {%- endif -%}
+    </div>
+
+    <div class="ci-body">
+      <div class="ci-title">{{ item.product.title }}</div>
+      {%- unless item.variant.title == 'Default Title' -%}
+        <div class="ci-variant">{{ item.variant.title }}</div>
+      {%- endunless -%}
+
+      <div class="ci-price-row">
+        <span class="ci-price" id="aln-price-{{ item.key }}">{{ line_cents | money }}</span>
+        {%- if save_cents > 0 -%}
+          <span class="ci-price-old" id="aln-price-old-{{ item.key }}">{{ ref_cents | money }}</span>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="ci-right">
+      {%- comment -%}
+        `| json` emits a double-quoted string; putting it in a data attribute
+        (instead of an inline onclick="...") avoids quote collisions entirely.
+      {%- endcomment -%}
+      <button type="button" class="ci-remove"
+              data-cart-action="remove" data-key='{{ item.key | json }}'>
+        Remove
+      </button>
+
+      <div class="qty-stepper" role="group" aria-label="Quantity">
+        <button type="button" data-cart-action="step" data-delta="-1"
+                data-key='{{ item.key | json }}' aria-label="Decrease quantity">−</button>
+        <input type="text" inputmode="numeric" readonly
+               id="aln-qty-{{ item.key }}" value="{{ item.quantity }}" aria-live="polite">
+        <button type="button" data-cart-action="step" data-delta="1"
+                data-key='{{ item.key | json }}' aria-label="Increase quantity">+</button>
+      </div>
+    </div>
+  </div>
+{%- endfor -%}
