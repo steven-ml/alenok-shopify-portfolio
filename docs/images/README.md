@@ -6,7 +6,7 @@ Real captures of the live store — **no mockups or AI-generated images.**
 |---|---|---|
 | `01-home-desktop.jpg` | Landing hero | ✅ |
 | `02-pdp-desktop.jpg` | Product page: gallery + bundle selector + buy box | ✅ |
-| `03-pdp-mobile.jpg` | Product page on mobile | ✅ |
+| `03-pdp-mobile.jpg` | Product page on mobile (390×844) | ⏳ pending |
 | `04-before-after-desktop.jpg` | Before/After section | ✅ |
 | `05-cart-desktop.jpg` | Cart with 2 units (bundle discount + reference price) | ⏳ pending |
 | `06-sticky-cta-mobile.jpg` | Sticky "buy" bar after scrolling past the buy box | ⏳ pending |
